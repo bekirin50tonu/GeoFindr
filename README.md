@@ -3,10 +3,11 @@
 GeoFindr, belirli bir coğrafi alan içinde işletmeleri kolayca bulmanı sağlayan bir araçtır. Google Haritalar API’sini kullanarak, seçtiğin bölgedeki işletmeleri filtreleyerek listelemeni sağlar. Belirli bir yarıçap içindeki dükkanları, kafeleri, restoranları ve diğer işletmeleri hızlıca keşfetmek için idealdir.
 
 Özellikler:
-✅ Çember içindeki işletmeleri listeleme – Seçtiğin bölge ve yarıçap içindeki işletmeleri kolayca görüntüle.
-✅ Kategori bazlı arama – Restoran, kafe, market gibi belirli türdeki işletmeleri filtrele.
-✅ Harita üzerinde görselleştirme – Sonuçları harita üzerinde etkileşimli olarak göster.
-✅ Kolay entegrasyon – React ve Google Maps API ile modern bir arayüz sunar.
+
+- ✅ Çember içindeki işletmeleri listeleme – Seçtiğin bölge ve yarıçap içindeki işletmeleri kolayca görüntüle.
+- ✅ Kategori bazlı arama – Restoran, kafe, market gibi belirli türdeki işletmeleri filtrele.
+- ✅ Harita üzerinde görselleştirme – Sonuçları harita üzerinde etkileşimli olarak göster.
+- ✅ Kolay entegrasyon – React ve Google Maps API ile modern bir arayüz sunar.
 
 GeoFindr, yerel işletmeleri keşfetmek isteyen kullanıcılar ve veri analizi yapan geliştiriciler için güçlü bir çözümdür. 🚀
 
@@ -29,19 +30,23 @@ npm run dev
 **Endpoint:** `GET /api/maps/location?address=[adres]&key=[api_key]`
 
 **Parametreler:**
+
 - `address` (zorunlu) - Adres bilgisi
 - `key` (zorunlu) - Google Maps API anahtarı
 
 **Açıklama:**
+
 - Verilen adresin koordinatlarını (enlem/boylam) ve detaylı konum bilgisini döner
 - Google Maps Geocoding API kullanır
 
 **Örnek İstek:**
+
 ```bash
 GET /api/maps/location?address=İstanbul&key=YOUR_API_KEY
 ```
 
 **Başarılı Yanıt:**
+
 ```json
 [
   {
@@ -62,6 +67,7 @@ GET /api/maps/location?address=İstanbul&key=YOUR_API_KEY
 **Endpoint:** `GET /api/maps/nearby?lat=[enlem]&lng=[boylam]&type=[tip]&radius=[yarıçap]&key=[api_key]`
 
 **Parametreler:**
+
 - `lat`, `lng` (zorunlu) - Konum koordinatları
 - `type` (zorunlu) - Yer tipi (restoran, otel vb.)
 - `radius` (zorunlu) - Arama yarıçapı (metre)
@@ -69,15 +75,18 @@ GET /api/maps/location?address=İstanbul&key=YOUR_API_KEY
 - `key` (zorunlu) - Google Maps API anahtarı
 
 **Açıklama:**
+
 - Verilen koordinatlar etrafındaki belirli tipteki yerleri listeler
 - Google Maps Places API kullanır
 
 **Örnek İstek:**
+
 ```bash
 GET /api/maps/nearby?lat=41.0082&lng=28.9784&type=restaurant&radius=1000&key=YOUR_API_KEY
 ```
 
 **Başarılı Yanıt:**
+
 ```json
 [
   {
