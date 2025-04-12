@@ -64,25 +64,28 @@ GET /api/maps/location?address=İstanbul&key=YOUR_API_KEY
 
 ### 2. Yakın Yerleri Listeleme (`/api/maps/nearby`)
 
-**Endpoint:** `GET /api/maps/nearby?lat=[enlem]&lng=[boylam]&type=[tip]&radius=[yarıçap]&key=[api_key]`
+**Endpoint:** `GET /api/maps/nearby?lat=[enlem]&lng=[boylam]&types=[tipler]&radius=[yarıçap]&maxResults=[sonuç_sayısı]&key=[api_key]`
 
 **Parametreler:**
 
-- `lat`, `lng` (zorunlu) - Konum koordinatları
-- `type` (zorunlu) - Yer tipi (restoran, otel vb.)
+- `lat` (zorunlu) - Enlem koordinatı
+- `lng` (zorunlu) - Boylam koordinatı
+- `types` (zorunlu) - Virgülle ayrılmış yer tipleri (örnek: "restaurant,cafe")
 - `radius` (zorunlu) - Arama yarıçapı (metre)
-- `maxResults` (opsiyonel) - Dönecek maksimum sonuç sayısı
+- `maxResults` (zorunlu) - Dönecek maksimum sonuç sayısı
 - `key` (zorunlu) - Google Maps API anahtarı
 
 **Açıklama:**
 
 - Verilen koordinatlar etrafındaki belirli tipteki yerleri listeler
-- Google Maps Places API kullanır
+- Google Maps Places API v1 kullanır
+- Birden fazla yer tipi belirtilebilir (virgülle ayrılmış)
+- Sonuçlar Türkçe dilinde döner
 
 **Örnek İstek:**
 
 ```bash
-GET /api/maps/nearby?lat=41.0082&lng=28.9784&type=restaurant&radius=1000&key=YOUR_API_KEY
+GET /api/maps/nearby?lat=41.0082&lng=28.9784&types=restaurant,cafe&radius=1000&maxResults=5&key=YOUR_API_KEY
 ```
 
 **Başarılı Yanıt:**
@@ -90,12 +93,27 @@ GET /api/maps/nearby?lat=41.0082&lng=28.9784&type=restaurant&radius=1000&key=YOU
 ```json
 [
   {
-    "name": "Tarihi Sultanahmet Köftecisi",
-    "vicinity": "Sultanahmet, İstanbul",
-    "rating": 4.5,
-    "place_id": "ChIJW6_..."
+    "name": "Svalinn Hotel Izmir Gaziemir Airport",
+    "formattedAddress": "Gazi, Akçay Cd. No:172, 35410 Gaziemir/İzmir, Türkiye",
+    "rating": 4.6,
+    "userRatingCount": 1869,
+    "types": ["hotel", "spa", "lodging", "restaurant", "point_of_interest", "food", "establishment"],
+    "location": {
+      "latitude": 38.3316363,
+      "longitude": 27.134696599999998
+    }
   },
-  ...
+  {
+    "name": "Pizza Vitorico",
+    "formattedAddress": "Gazi, Hasan Güven Cd No:60/1A, 35120 Gaziemir/İzmir, Türkiye",
+    "rating": 4,
+    "userRatingCount": 330,
+    "types": ["pizza_restaurant", "restaurant", "point_of_interest", "food", "establishment"],
+    "location": {
+      "latitude": 38.3252144,
+      "longitude": 27.127582
+    }
+  }
 ]
 ```
 
@@ -104,8 +122,8 @@ GET /api/maps/nearby?lat=41.0082&lng=28.9784&type=restaurant&radius=1000&key=YOU
 1. Depoyu klonlayın:
 
 ```bash
-git clone [repo-url]
-cd map-fetch
+git clone https://github.com/bekirin50tonu/GeoFindr
+cd GeoFindr
 ```
 
 2. Bağımlılıkları yükleyin:

@@ -6,16 +6,25 @@ export const GET = async (req: NextRequest) => {
   const { searchParams } = new URL(req.url)
   const lat = searchParams.get('lat')
   const lng = searchParams.get('lng')
-  const type = searchParams.get('type')
+  const types = searchParams.get('types')
   const maxResults = searchParams.get('maxResults')
   const radius = searchParams.get('radius')
 
-  if (!lat || !lng || !type || !radius) {
+  if (!lat || !lng || !types || !radius || !maxResults) {
     return NextResponse.json(
-      { error: 'Required parameters are missing (lat, lng, type, radius)' },
+      { error: 'Required parameters are missing (lat, lng, type, radius,maxResults)' },
       { status: 400 }
     )
   }
+
+  const typesArray = types.split(",")
+  if (typesArray.length === 0) {
+    return NextResponse.json(
+      { error: 'At least one valid type must be provided' },
+      { status: 400 }
+    )
+  }
+
 
   const apiKey = searchParams.get('key')
   if (!apiKey) {
@@ -28,25 +37,43 @@ export const GET = async (req: NextRequest) => {
     )
   }
 
-  const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&type=${type}&radius=${radius}&key=${apiKey}`
+  const url = `https://places.googleapis.com/v1/places:searchNearby`
+
+
 
   try {
-    const response = await axios.get(url)
-    if (response.data.status === 'OK') {
-      const results = maxResults
-        ? response.data.results.slice(0, Number(maxResults))
-        : response.data.results
-      return NextResponse.json(results, { status: 200 })
-    } else {
-      return NextResponse.json(
-        { error: `Nearby search error: ${response.data.status}` },
-        { status: 400 }
-      )
+    const params = {
+      "includedTypes": [...typesArray],
+      "maxResultCount": maxResults,
+      "locationRestriction": {
+        "circle": {
+          "center": {
+            "latitude": lat,
+            "longitude": lng
+          },
+          "radius": radius
+        }
+      },
+      "languageCode": "tr"
     }
+    console.log("gelen", params);
+    const response = await axios.post(url, params, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": apiKey,
+        "X-Goog-FieldMask": "*"
+      }
+    })
+    if (response.status === 200) {
+      return NextResponse.json(response.data.places, { status: 200 })
+    } return NextResponse.json(
+      { error: `Nearby search error: ${response.statusText}` },
+      { status: 400 }
+    )
   } catch (error) {
     console.error(error)
     return NextResponse.json(
-      { error: 'Internal Server Error' },
+      { error: 'Internal Server Error' + error },
       { status: 500 }
     )
   }
